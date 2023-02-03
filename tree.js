@@ -267,6 +267,45 @@ function VerifySequenceOfBst(sequence) {
     // }
 }
 
+// 6.给定一个二叉树，找出其最大深度。
+function TreeDepth(proot){
+    return !proot ? 0 : Math.max(TreeDepth(proot.left),TreeDepth(proot.right))+1
+}
+
+// 7.给定一个二叉树，找出其最小深度。
+// 最小深度是从根节点到最近叶子节点的最短路径上的节点数量。
+// 说明: 叶子节点是指没有子节点的节点。
+function MinDepth(proot){
+    if(!proot) return 0
+
+    if(!proot.left){
+        return MinDepth(proot.right)+1
+    }
+
+    if(!proot.right){
+        return MinDepth(proot.left)+1
+    }
+
+    return Math.min(MinDepth(proot.right),MinDepth(proot.left))+1
+}
+
+// 8.输入一棵二叉树，判断该二叉树是否是平衡二叉树。
+// 平衡二叉树：每个子树的深度之差不超过1
+function isBalanced_Solution(proot){
+    return balanced(proot)!== -1
+}
+function balanced(proot){
+    if(!proot) return 0
+    const left = balanced(proot.left)
+    const right = balanced(proot.right)
+    if(left==-1||right==-1||Math.abs(left-right)>1){
+        return -1
+    }
+    return Math.max(left,right)+1
+}
+
+
+
 // var t = new Tree()
 // t.insert(2)
 // t.insert(4)
@@ -311,41 +350,44 @@ function VerifySequenceOfBst(sequence) {
 // }
 // console.log(isSymmetrical(tNode))
 
-// var sNode = {
-//     data: 4,
-//     left: {
-//         data: 2,
-//         left: {
-//             data: 1,
-//             left: null,
-//             right: null
-//         },
-//         right: {
-//             data: 3,
-//             left: null,
-//             right: null
-//         }
-//     },
-//     right: {
-//         data: 6,
-//         left: {
-//             data: 5,
-//             left: null,
-//             right: null
-//         },
-//         right: {
-//             data: 7,
-//             left: null,
-//             right: null
-//         }
-//     }
-// }
+var sNode = {
+    data: 4,
+    left: {
+        data: 2,
+        left: {
+            data: 1,
+            left: null,
+            right: null
+        },
+        right: {
+            data: 3,
+            left: null,
+            right: null
+        }
+    },
+    right: {
+        data: 6,
+        left: {
+            data: 5,
+            left: null,
+            right: null
+        },
+        right: {
+            data: 7,
+            left: null,
+            right: null
+        }
+    }
+}
 // console.log(ktnNode(sNode, 3))
 // console.log(KthNode(sNode, 3))
 
-var data1 = [4, 8, 6, 12, 16, 14, 10]
-var data2 = []
-var data3 = [7, 6, 4, 5]
-console.log(VerifySequenceOfBst(data1))
-console.log(VerifySequenceOfBst(data2))
-console.log(VerifySequenceOfBst(data3))
+// var data1 = [4, 8, 6, 12, 16, 14, 10]
+// var data2 = []
+// var data3 = [7, 6, 4, 5]
+// console.log(VerifySequenceOfBst(data1))
+// console.log(VerifySequenceOfBst(data2))
+// console.log(VerifySequenceOfBst(data3))
+console.log(TreeDepth(sNode))
+console.log(MinDepth(sNode))
+console.log(isBalanced_Solution(sNode))
