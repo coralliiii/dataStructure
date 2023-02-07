@@ -268,41 +268,107 @@ function VerifySequenceOfBst(sequence) {
 }
 
 // 6.给定一个二叉树，找出其最大深度。
-function TreeDepth(proot){
-    return !proot ? 0 : Math.max(TreeDepth(proot.left),TreeDepth(proot.right))+1
+function TreeDepth(proot) {
+    return !proot ? 0 : Math.max(TreeDepth(proot.left), TreeDepth(proot.right)) + 1
 }
 
 // 7.给定一个二叉树，找出其最小深度。
 // 最小深度是从根节点到最近叶子节点的最短路径上的节点数量。
 // 说明: 叶子节点是指没有子节点的节点。
-function MinDepth(proot){
-    if(!proot) return 0
+function MinDepth(proot) {
+    if (!proot) return 0
 
-    if(!proot.left){
-        return MinDepth(proot.right)+1
+    if (!proot.left) {
+        return MinDepth(proot.right) + 1
     }
 
-    if(!proot.right){
-        return MinDepth(proot.left)+1
+    if (!proot.right) {
+        return MinDepth(proot.left) + 1
     }
 
-    return Math.min(MinDepth(proot.right),MinDepth(proot.left))+1
+    return Math.min(MinDepth(proot.right), MinDepth(proot.left)) + 1
 }
 
 // 8.输入一棵二叉树，判断该二叉树是否是平衡二叉树。
 // 平衡二叉树：每个子树的深度之差不超过1
-function isBalanced_Solution(proot){
-    return balanced(proot)!== -1
+function isBalanced_Solution(proot) {
+    return balanced(proot) !== -1
 }
-function balanced(proot){
-    if(!proot) return 0
+function balanced(proot) {
+    if (!proot) return 0
     const left = balanced(proot.left)
     const right = balanced(proot.right)
-    if(left==-1||right==-1||Math.abs(left-right)>1){
+    if (left == -1 || right == -1 || Math.abs(left - right) > 1) {
         return -1
     }
-    return Math.max(left,right)+1
+    return Math.max(left, right) + 1
 }
+
+// 9.输入一颗二叉树的根节点和一个整数，打印出二叉树中结点值的和为输入整数的所有路径。
+// 路径定义为从树的根结点开始往下一直到叶结点所经过的结点形成一条路径。
+function findPath(root, expectNumber) {
+    const result = [];
+    if (root) {
+        findPathCore(root, expectNumber, [], 0, result)
+    }
+    return result;
+}
+function findPathCore(node, expectNumber, stack, sum, result) {
+    stack.push(node.data)
+    sum += node.data;
+    console.log('node', node.data, stack)
+    if (!node.left && !node.right && sum == expectNumber) {
+        console.log('OK')
+        result.push(stack.slice(0))
+    }
+    if (node.left && sum < expectNumber) {
+        console.log('left')
+        findPathCore(node.left, expectNumber, stack, sum, result)
+    }
+    if (node.right && sum < expectNumber) {
+        console.log('right')
+        findPathCore(node.right, expectNumber, stack, sum, result)
+    }
+    console.log('pop')
+    stack.pop()
+}
+
+// 10.输入一棵二叉搜索树，将该二叉搜索树转换成一个排序的双向链表。
+// 要求不能创建任何新的结点，只能调整树中结点指针的指向。
+// ？？？？
+
+
+// 11.请实现两个函数，分别用来序列化和反序列化二叉树
+function Serialize(root,arr = []){
+    if(!root){
+        arr.push("#");
+    }else{
+        arr.push(root.data)
+        Serialize(root.left,arr)
+        Serialize(root.right,arr)
+    }
+    return arr.join(',')
+}
+function Deserialize(s){
+    if(!s){
+        return null
+    }
+    return deserialize(s.split(','))
+}
+function deserialize(arr,str){
+    let node = null
+    // console.log(str,arr)
+    const current = arr.shift()
+    if(current !== "#"){
+        console.log('current:',current)
+        node = {data:current}
+        node.left = deserialize(arr,'left')
+        node.right = deserialize(arr,"right")
+    }
+    // console.log('node:',node)
+    return node
+}
+
 
 
 
@@ -388,6 +454,9 @@ var sNode = {
 // console.log(VerifySequenceOfBst(data1))
 // console.log(VerifySequenceOfBst(data2))
 // console.log(VerifySequenceOfBst(data3))
-console.log(TreeDepth(sNode))
-console.log(MinDepth(sNode))
-console.log(isBalanced_Solution(sNode))
+// console.log(TreeDepth(sNode))
+// console.log(MinDepth(sNode))
+// console.log(isBalanced_Solution(sNode))
+// console.log(findPath(sNode, 7))
+// console.log(Serialize(sNode))
+console.log(Deserialize(Serialize(sNode)))
