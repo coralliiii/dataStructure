@@ -339,36 +339,96 @@ function findPathCore(node, expectNumber, stack, sum, result) {
 
 
 // 11.请实现两个函数，分别用来序列化和反序列化二叉树
-function Serialize(root,arr = []){
-    if(!root){
+function Serialize(root, arr = []) {
+    if (!root) {
         arr.push("#");
-    }else{
+    } else {
         arr.push(root.data)
-        Serialize(root.left,arr)
-        Serialize(root.right,arr)
+        Serialize(root.left, arr)
+        Serialize(root.right, arr)
     }
     return arr.join(',')
 }
-function Deserialize(s){
-    if(!s){
+function Deserialize(s) {
+    if (!s) {
         return null
     }
     return deserialize(s.split(','))
 }
-function deserialize(arr,str){
+function deserialize(arr, str) {
     let node = null
     // console.log(str,arr)
     const current = arr.shift()
-    if(current !== "#"){
-        console.log('current:',current)
-        node = {data:current}
-        node.left = deserialize(arr,'left')
-        node.right = deserialize(arr,"right")
+    if (current !== "#") {
+        console.log('current:', current)
+        node = { data: current }
+        node.left = deserialize(arr, 'left')
+        node.right = deserialize(arr, "right")
     }
     // console.log('node:',node)
     return node
 }
 
+
+// 12.给定一个二叉树和其中的一个结点，请找出中序遍历顺序的下一个结点并且返回。
+// 注意，树中的结点不仅包含左右子结点，同时包含指向父结点的指针。 
+/*function TreeLinkNode(x){
+    this.val = x;
+    this.left = null;
+    this.right = null;
+    this.next = null;
+}*/
+function GetNext(pNode) {
+    if (!pNode) {
+        return null
+    }
+    if (pNode.right) {
+        pNode = pNode.right
+        while (pNode) {
+            pNode = pNode.left
+        }
+        return pNode
+    } else {
+        while (pNode) {
+            if (!pNode.next) {
+                return null
+            } else if (pNode == pNode.next.left) {
+                return pNode.next
+            }
+            pNode = pNode.next
+        }
+        return pNode
+    }
+}
+
+// 13.输入两棵二叉树A，B，判断B是不是A的子结构。（ps：我们约定空树不是任意一个树的子结构）
+function HasSubTree(proot1, proot2) {
+    let result = false
+    if (proot1 && proot2) {
+        if (proot1.data == proot2.data) {
+            result = compare(proot1, proot2)
+        }
+        if (!result) {
+            result = HasSubTree(proot1.left, proot2)
+        }
+        if (!result) {
+            result = HasSubTree(proot1.right, proot2)
+        }
+    }
+    return result
+}
+function compare(proot1, proot2) {
+    if (proot2 == null) {
+        return true
+    }
+    if (proot1 == null) {
+        return false
+    }
+    if (proot1.data != proot2.data) {
+        return false
+    }
+    return compare(proot1.left, proot2.left) && compare(proot1.right, proot2.right)
+}
 
 
 
@@ -445,6 +505,19 @@ var sNode = {
         }
     }
 }
+var zNode = {
+    data: 1,
+    left: {
+        data: 1,
+        left: null,
+        right: null
+    },
+    right: {
+        data: 3,
+        left: null,
+        right: null
+    }
+}
 // console.log(ktnNode(sNode, 3))
 // console.log(KthNode(sNode, 3))
 
@@ -459,4 +532,5 @@ var sNode = {
 // console.log(isBalanced_Solution(sNode))
 // console.log(findPath(sNode, 7))
 // console.log(Serialize(sNode))
-console.log(Deserialize(Serialize(sNode)))
+// console.log(Deserialize(Serialize(sNode)))
+console.log(HasSubTree(sNode,zNode))
