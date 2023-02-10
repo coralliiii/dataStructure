@@ -145,6 +145,16 @@ function reverseList(head) {
     return headNode
 }
 
+// 复制一个普通链表
+function CopyList(List){
+    let newList = new LinkList()
+    let currentNode = List.head
+    while(currentNode){
+        newList.append(currentNode.data)
+        currentNode = currentNode.next
+    }
+    return newList
+}
 
 let list1 = new LinkList()
 list1.append('A')
@@ -157,4 +167,5 @@ console.log(list1)
 // console.log(list1.indexOf('C'))
 // console.log(list1.toString())
 // console.log(printListFromTailToHead(list1.head))
-console.log(reverseList(list1.head))
+// console.log(reverseList(list1.head))
+console.log('CopyList',CopyList(list1).toString())
