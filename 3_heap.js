@@ -5,8 +5,7 @@ function swap(arr, i, j) {
     arr[j] = temp
 }
 
-// 大顶堆的构建
-
+// 1. 大顶堆的构建
 // arr 待构建数组
 // index 检查的起始下标
 // size 堆大小
