@@ -120,8 +120,8 @@ function GetMedian() {
         return (minHeap.value[0] + maxHeap.value[0]) / 2
     }
 }
-let arr = [2,3,4,1,5,6,7,10]
-for(let i in arr){
+let arr = [2, 3, 4, 1, 5, 6, 7, 10]
+for (let i in arr) {
     Insert(arr[i])
 }
 console.log(minHeap)
@@ -138,37 +138,82 @@ console.log(GetMedian())
 // 2.从第k个数开始，和大顶堆的最大值进行比较，若比最大值小，交换两个数的位置，重新构建大顶堆
 // 3.一次遍历之后大顶堆里的数就是整个数据里最小的k个数。
 // 时间复杂度nlogk，优于思路1。
-function GetLeastNumbers(arr,k){
-    if(arr.length<k){
+function GetLeastNumbers(arr, k) {
+    if (arr.length < k) {
         return []
     }
-    createMaxHeap(arr,k)
-    for(let i = k;i<arr.length;i++){
-        if(arr[i]<arr[0]){
-            swap(arr,i,0)
-            maxHeapify(arr,0,k)
+    createMaxHeap(arr, k)
+    for (let i = k; i < arr.length; i++) {
+        if (arr[i] < arr[0]) {
+            swap(arr, i, 0)
+            maxHeapify(arr, 0, k)
         }
     }
-    return arr.slice(0,k)
+    return arr.slice(0, k)
 
 }
-
-function createMaxHeap(arr,k){
-    for(let i = Math.floor(k/2-1);i>=0;i--){
-        MaxHeapify(arr,i,k)
+function createMaxHeap(arr, k) {
+    for (let i = Math.floor(k / 2 - 1); i >= 0; i--) {
+        MaxHeapify(arr, i, k)
     }
 }
-function MaxHeapify(arr,index,length){
-    for(let i = index*2+1;i<length;i = i*2+1){
-        if(i+1<length && arr[i]<arr[i+1]){
+function MaxHeapify(arr, index, length) {
+    for (let i = index * 2 + 1; i < length; i = i * 2 + 1) {
+        if (i + 1 < length && arr[i] < arr[i + 1]) {
             i++
         }
-        if(arr[index]<arr[i]){
-            swap(arr,index,i)
+        if (arr[index] < arr[i]) {
+            swap(arr, index, i)
             index = i
-        }else{
+        } else {
             break
         }
     }
 }
-console.log(GetLeastNumbers(arr,4))
+console.log(GetLeastNumbers(arr, 4))
+
+/**
+ * 
+ 堆排序
+  堆排序基本介绍
+1.堆排序是利用堆这种数据结构而设计的一种排序算法，堆排序是一种选择排序，它的最坏，最好，平均时间复杂度均为O(nlogn)，它也是不稳定排序。
+2.堆是具有以下性质的完全二叉树：每个结点的值都大于或等于其左右孩子结点的值，称为大顶堆, 注意 : 没有要求结点的左孩子的值和右孩子的值的大小关系。
+3.每个结点的值都小于或等于其左右孩子结点的值，称为小顶堆
+
+堆排序的基本思想是：
+1.将待排序序列构造成一个大顶堆
+2.此时，整个序列的最大值就是堆顶的根节点。
+3.将其与末尾元素进行交换，此时末尾就为最大值。
+4.然后将剩余n-1个元素重新构造成一个堆，这样会得到n个元素的次小值。如此反复执行，便能得到一个有序序列了。
+
+可以看到在构建大顶堆的过程中，元素的个数逐渐减少，最后就得到一个有序序列了.
+
+
+ * 
+ */
+function heapSort(arr) {
+    let len = arr.length
+    for (let i = Math.floor(arr.length / 2) - 1; i >= 0; i--) {
+        adjustHeap(arr, i, len)
+    }
+    for (let j = len - 1; j >= 0; j--) {
+        swap(arr, j, 0)
+        adjustHeap(arr, 0, j)
+    }
+    return arr
+}
+function adjustHeap(arr, index, length) {
+    for (let i = index * 2 + 1; i < length; i = i * 2 + 1) {
+        if (i + 1 < length && arr[i] < arr[i + 1]) {
+            i++
+        }
+        if (arr[index] < arr[i]) {
+            swap(arr, i, index)
+            index = i
+        } else {
+            break
+        }
+    }
+}
+
+console.log(heapSort(arr))
