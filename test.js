@@ -1,35 +1,21 @@
-// 交换两个节点
-function swap(arr, i, j) {
-    let temp = arr[i]
-    arr[i] = arr[j]
-    arr[j] = temp
-}
-
-// 大顶堆的构建
-
-// arr 待构建数组
-// index 检查的起始下标
-// size 堆大小
-function maxHeapify(arr, index, size) {
-    for (let i = index * 2 + 1; i < size; i = i * 2 + 1) {
-        if (i + 1 < size && arr[i] < arr[i + 1]) {
-            i++
-        }
-        if (arr[index] > arr[i]) {
-            break;
-        } else {
-            swap(arr, index, i)
-            index = i
-        }
+Array.prototype.MyReaduce = function (fn, initialValue) {
+    let arr = this
+    if (arr.length < 1) {
+        throw new Error('erro')
     }
-}
-
-function buildMaxHeap(arr) {
-    let len = arr.length
-    // 从第一个非叶子节点开始自下而上构建大顶堆
-    for (let i = Math.floor(len / 2) - 1; i >= 0; i--) {
-        maxHeapify(arr, i, len)
+    var value = initialValue ? initialValue : arr[0]
+    for (let i = initialValue ? 0 : 1; i < arr.length; i++) {
+        value = fn(value, arr[i], i, arr)
     }
-    return arr
+    return value
 }
-console.log(buildMaxHeap([1, 2, 0, 9, 8, 3, 4, 5, 6, 7]))
+var arr = [2, 1, 4, 5, 6, 9]
+// var arr = []
+
+console.log(arr.reduce((pre, cur) => {
+    return pre + cur
+}, 0))
+
+console.log(arr.MyReaduce((pre, cur) => {
+    return pre + cur
+}, 0))
