@@ -146,10 +146,10 @@ function reverseList(head) {
 }
 
 // 复制一个普通链表
-function CopyList(List){
+function CopyList(List) {
     let newList = new LinkList()
     let currentNode = List.head
-    while(currentNode){
+    while (currentNode) {
         newList.append(currentNode.data)
         currentNode = currentNode.next
     }
@@ -163,9 +163,106 @@ list1.append('C')
 list1.append('D')
 list1.append('E')
 list1.append('F')
-console.log(list1)
+// console.log(list1)
 // console.log(list1.indexOf('C'))
 // console.log(list1.toString())
 // console.log(printListFromTailToHead(list1.head))
 // console.log(reverseList(list1.head))
-console.log('CopyList',CopyList(list1).toString())
+// console.log('CopyList', CopyList(list1).toString())
+
+// 3. 输入一个复杂链表（每个节点中有节点值，以及两个指针，一个指向下一个节点，
+// 另一个特殊指针指向任意一个节点），返回结果为复制后复杂链表的head。
+// 思路
+// 拆分成三步
+// 1.复制一份链表放在前一个节点后面，即根据原始链表的每个节点N创建N,把N直接放在N的next位置，让复制后的链表和原始链表组成新的链表。
+// 2.给复制的链表random赋值，即N.random=N.random.next。
+// 3.拆分链表，将N`和N进行拆分，保证原始链表不受影响。
+function Clone(pHead) {
+    if (pHead === null) {
+        return null;
+    }
+    cloneNodes(pHead);
+    cloneRandom(pHead);
+    return reconnetNodes(pHead);
+}
+
+function cloneNodes(pHead) {
+    var current = pHead;
+    while (current) {
+        var cloneNode = {
+            label: current.label,
+            next: current.next
+        };
+        current.next = cloneNode;
+        current = cloneNode.next;
+    }
+}
+
+function cloneRandom(pHead) {
+    var current = pHead;
+    while (current) {
+        var cloneNode = current.next;
+        if (current.random) {
+            cloneNode.random = current.random.next;
+        } else {
+            cloneNode.random = null;
+        }
+        current = cloneNode.next;
+    }
+}
+
+function reconnetNodes(pHead) {
+    var cloneHead = pHead.next;
+    var cloneNode = pHead.next;
+    var current = pHead;
+    while (current) {
+        current.next = cloneNode.next;
+        current = cloneNode.next;
+        if (current) {
+            cloneNode.next = current.next;
+            cloneNode = current.next;
+        } else {
+            cloneNode.next = null;
+        }
+    }
+    return cloneHead;
+}
+
+// 4. 输入两个单调递增的链表，输出两个链表合成后的链表，当然我们需要合成后的链表满足单调不减规则。
+// 链表头部节点比较，取较小节点。
+// 小节点的next等于小节点的next和大节点的较小值。
+// 如此递归。
+// 返回小节点。
+// 考虑代码的鲁棒性，也是递归的终止条件，两个head为null的情况，取对方节点返回。
+function Merge(pHead1, pHead2) {
+    if (!pHead1) {
+        return pHead2
+    }
+    if (!pHead2) {
+        return pHead1
+    }
+    let head
+    if (pHead1.data < pHead2.data) {
+        head = pHead1
+        head.next = Merge(pHead1.next, pHead2)
+    } else {
+        head = pHead2
+        head.next = Merge(pHead1, pHead2.next)
+    }
+    return head
+}
+let listA = new LinkList()
+listA.append('1')
+listA.append('3')
+listA.append('6')
+listA.append('9')
+listA.append('10')
+let listB = new LinkList()
+listB.append('2')
+listB.append('4')
+listB.append('5')
+listB.append('7')
+listB.append('8')
+// console.log('listA',listA,'listB',listB)
+// console.log((Merge(listA.head,listB.head)))
+console.log(JSON.stringify(Merge(listA.head,listB.head), null, 4));
